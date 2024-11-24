@@ -17,12 +17,12 @@ public class MedItemServiceImpl implements MedItemService{
 
 
     private final MedItemRepository medItemRepository;
-    private final MedAlarmService medAlarmService;
+    private final AlarmGeneratorService alarmGeneratorService;
 
     @Autowired
-    public MedItemServiceImpl(MedItemRepository repository,MedAlarmService medAlarmService){
+    public MedItemServiceImpl(MedItemRepository repository,AlarmGeneratorService alarmGeneratorService){
         this.medItemRepository =  repository;
-        this.medAlarmService = medAlarmService;
+        this.alarmGeneratorService = alarmGeneratorService;
     }
 
     public MedItem createMedItem(MedItemRequest request) {
@@ -32,7 +32,7 @@ public class MedItemServiceImpl implements MedItemService{
         medItem.setDosis(request.getDosis());
         medItem.setFrecuencia(request.getFrecuencia());
         medItem.setHoraYFechaDeInicio(LocalDateTime.parse(request.getHorayFechaDeInicio()));
-        List<MedAlarm> alarms = medAlarmService.generateAlarms(request);
+        List<MedAlarm> alarms = alarmGeneratorService.generateAlarms(request);
 
         // 4. Asociar alarmas al MedItem
         medItem.setAlarms(alarms);

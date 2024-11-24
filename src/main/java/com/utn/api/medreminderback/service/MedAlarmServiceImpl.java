@@ -5,11 +5,14 @@ import com.utn.api.medreminderback.model.MedAlarm;
 import com.utn.api.medreminderback.model.MedItem;
 import com.utn.api.medreminderback.model.MedItemRequest;
 import com.utn.api.medreminderback.repository.MedAlarmRepository;
+import com.utn.api.medreminderback.repository.MedItemRepository;
 import com.utn.api.medreminderback.utils.AlarmStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +20,14 @@ import java.util.Optional;
 public class MedAlarmServiceImpl implements MedAlarmService {
 
     private MedAlarmRepository medAlarmRepository;
+    private MedItemService medItemService;
 
-    public MedAlarmServiceImpl (MedAlarmRepository medAlarmRepository) {
+    @Autowired
+    public MedAlarmServiceImpl (MedAlarmRepository medAlarmRepository,MedItemService medItemService) {
         this.medAlarmRepository=medAlarmRepository;
+        this.medItemService=medItemService;
     }
+
 
 
 
@@ -52,6 +59,23 @@ public class MedAlarmServiceImpl implements MedAlarmService {
 
                 }
         );
+    }
+
+    @Override
+    public Optional<MedAlarm> getNextAlarmById(Long id) {
+
+        Optional<MedItem> optionalMedItem = medItemService.getMedItemById(id);
+        if (optionalMedItem.isPresent()) {
+            MedItem medItem = optionalMedItem.get();
+            Optional<MedAlarm> nextAlarm = medItem.getAlarms().stream()
+                    .filter(alarm -> alarm.getStatus() == AlarmStatus.WAITING.asChar())
+                    .sorted(Comparator.comparing(MedAlarm::getId))
+                    .findFirst();
+            return nextAlarm;
+        } else {
+            return  null;
+        }
+
     }
 
 }

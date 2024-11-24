@@ -13,4 +13,6 @@ public interface MedAlarmService {
     List<MedAlarm> generateAlarms(MedItemRequest request);
 
     Optional<MedAlarm> alarmToFinish(Long id);
+
+    Optional<MedAlarm> getNextAlarmById(Long id);
 }

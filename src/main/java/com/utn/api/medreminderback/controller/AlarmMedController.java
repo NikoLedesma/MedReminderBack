@@ -26,5 +26,14 @@ public class AlarmMedController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/next-alarm-by-medId/{id}")
+    public ResponseEntity<MedAlarm> getNextAlarmById(@PathVariable Long id) {
+        return medAlarmService.getNextAlarmById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.ok().build()); // Devuelve 200 OK con cuerpo vacío
+    }
+
+    //De la lista de alarmas agarrar la alarma que tiene fecha mas proxima y este en estado de waiting
+    //Con la alarma se debera llamar al alarm Scheduler y activar la alarma
 
 }
