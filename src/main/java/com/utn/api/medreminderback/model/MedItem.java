@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -20,7 +22,7 @@ public class MedItem {
     private String medicamento;
     private String dosis;
     private String frecuencia;
-    private String horaInicio;
+    private LocalDateTime horaYFechaDeInicio;
 
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

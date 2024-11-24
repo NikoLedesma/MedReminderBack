@@ -2,6 +2,7 @@ package com.utn.api.medreminderback.controller;
 
 
 import com.utn.api.medreminderback.model.MedItem;
+import com.utn.api.medreminderback.model.MedItemRequest;
 import com.utn.api.medreminderback.service.MedItemServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,8 @@ public class MedItemController {
 
 
     @PostMapping
-    public ResponseEntity<MedItem> createMedItem(@RequestBody MedItem medItem) {
-        return new ResponseEntity<>(service.createMedItem(medItem), HttpStatus.CREATED);
+    public ResponseEntity<MedItem> createMedItem(@RequestBody MedItemRequest request) {
+        return new ResponseEntity<>(service.createMedItem(request), HttpStatus.CREATED);
     }
 
     @GetMapping

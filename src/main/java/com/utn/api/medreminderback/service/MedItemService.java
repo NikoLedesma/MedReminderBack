@@ -1,13 +1,14 @@
 package com.utn.api.medreminderback.service;
 
 import com.utn.api.medreminderback.model.MedItem;
+import com.utn.api.medreminderback.model.MedItemRequest;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface MedItemService {
 
-    public MedItem createMedItem(MedItem medItem);
+    public MedItem createMedItem(MedItemRequest request);
 
     public List<MedItem> getMedItems();
 
