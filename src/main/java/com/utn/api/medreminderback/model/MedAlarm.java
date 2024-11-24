@@ -19,6 +19,7 @@ public class MedAlarm {
     private int dayOfWeek; // 1 (domingo) a 7 (sábado)
     private int alarmHour;      // Hora en formato 24 horas
     private int alarmMinute;    // Minuto
+    private char status;    // W:Pendiente, R:Terminado/Ya Corrido;
 
     private LocalDateTime alarmDateTime; // Nueva columna para la fecha y hora completas
 
