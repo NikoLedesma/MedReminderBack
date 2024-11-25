@@ -40,7 +40,7 @@ public class MedAlarmServiceImpl implements MedAlarmService {
         List<MedAlarm> alarms = new ArrayList<>();
         for (int i = 0; i < request.getCantidad(); i++) {
             MedAlarm alarm = new MedAlarm();
-            alarm.setAlarmDateTime(startDateTime.plusHours(i * request.getFrecuenciaEnHoras())); // Sumar horas
+            alarm.setAlarmDateTime(startDateTime.plusSeconds(i * request.getFrecuenciaEnSegundos())); // Sumar horas
             alarm.setAlarmHour(alarm.getAlarmDateTime().getHour());
             alarm.setAlarmMinute(alarm.getAlarmDateTime().getMinute());
             alarm.setDayOfWeek(alarm.getAlarmDateTime().getDayOfWeek().getValue());
