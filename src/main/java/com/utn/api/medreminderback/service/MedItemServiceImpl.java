@@ -3,7 +3,9 @@ package com.utn.api.medreminderback.service;
 import com.utn.api.medreminderback.model.MedAlarm;
 import com.utn.api.medreminderback.model.MedItem;
 import com.utn.api.medreminderback.model.MedItemRequest;
+import com.utn.api.medreminderback.model.StatusCount;
 import com.utn.api.medreminderback.repository.MedItemRepository;
+import com.utn.api.medreminderback.utils.AlarmStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,17 +13,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class MedItemServiceImpl implements MedItemService{
+public class MedItemServiceImpl implements MedItemService {
 
 
     private final MedItemRepository medItemRepository;
     private final AlarmGeneratorService alarmGeneratorService;
 
     @Autowired
-    public MedItemServiceImpl(MedItemRepository repository,AlarmGeneratorService alarmGeneratorService){
-        this.medItemRepository =  repository;
+    public MedItemServiceImpl(MedItemRepository repository, AlarmGeneratorService alarmGeneratorService) {
+        this.medItemRepository = repository;
         this.alarmGeneratorService = alarmGeneratorService;
     }
 
@@ -42,9 +45,17 @@ public class MedItemServiceImpl implements MedItemService{
     }
 
 
-
     public List<MedItem> getMedItems() {
-        return medItemRepository.findAll();
+        return medItemRepository.findAll().stream()
+                .peek(medItem -> {
+                    StatusCount statusCount = new StatusCount(0, 0, 0);
+                    medItem.getAlarms().forEach(alarm -> {
+                        AlarmStatus status = AlarmStatus.fromChar(alarm.getStatus());
+                        statusCount.incrementCount(status);
+                    });
+                    medItem.setStatusCount(statusCount);
+                })
+                .collect(Collectors.toList());
     }
 
     public Optional<MedItem> getMedItemById(Long id) {

@@ -26,6 +26,13 @@ public class AlarmMedController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/toReadyStatus/{id}")
+    public ResponseEntity<MedAlarm> alarmToReady(@PathVariable Long id){
+        return medAlarmService.alarmToReady(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/next-alarm-by-medId/{id}")
     public ResponseEntity<MedAlarm> getNextAlarmById(@PathVariable Long id) {
         return medAlarmService.getNextAlarmById(id)

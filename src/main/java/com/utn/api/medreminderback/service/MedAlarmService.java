@@ -15,4 +15,6 @@ public interface MedAlarmService {
     Optional<MedAlarm> alarmToFinish(Long id);
 
     Optional<MedAlarm> getNextAlarmById(Long id);
+
+    Optional<MedAlarm> alarmToReady(Long id);
 }

@@ -44,7 +44,13 @@ public class MedAlarmServiceImpl implements MedAlarmService {
             alarm.setAlarmHour(alarm.getAlarmDateTime().getHour());
             alarm.setAlarmMinute(alarm.getAlarmDateTime().getMinute());
             alarm.setDayOfWeek(alarm.getAlarmDateTime().getDayOfWeek().getValue());
-            alarm.setStatus(AlarmStatus.WAITING.asChar());
+            //if (i==0){
+            //    alarm.setStatus(AlarmStatus.READY.asChar());
+            //} else{
+                alarm.setStatus(AlarmStatus.WAITING.asChar());
+            //}
+
+
             alarms.add(alarm);
         }
         return alarms;
@@ -55,6 +61,18 @@ public class MedAlarmServiceImpl implements MedAlarmService {
        return  this.medAlarmRepository.findById(id).map(
                 existingItem->{
                     existingItem.setStatus(AlarmStatus.FINISHED.asChar());
+                    return medAlarmRepository.save(existingItem);
+
+                }
+        );
+    }
+
+
+    @Override
+    public Optional<MedAlarm> alarmToReady(Long id) {
+        return  this.medAlarmRepository.findById(id).map(
+                existingItem->{
+                    existingItem.setStatus(AlarmStatus.READY.asChar());
                     return medAlarmRepository.save(existingItem);
 
                 }

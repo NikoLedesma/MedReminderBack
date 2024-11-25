@@ -24,6 +24,9 @@ public class MedItem {
     private String frecuencia;
     private LocalDateTime horaYFechaDeInicio;
 
+    @Transient
+    private StatusCount statusCount;
+
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "med_item_id") // Relación unidireccional con una clave foránea en MedAlarm
