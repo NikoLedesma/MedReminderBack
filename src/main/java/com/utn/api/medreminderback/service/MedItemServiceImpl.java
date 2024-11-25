@@ -1,5 +1,6 @@
 package com.utn.api.medreminderback.service;
 
+import com.utn.api.medreminderback.exception.MedAlreadyExisteException;
 import com.utn.api.medreminderback.model.MedAlarm;
 import com.utn.api.medreminderback.model.MedItem;
 import com.utn.api.medreminderback.model.MedItemRequest;
@@ -29,6 +30,28 @@ public class MedItemServiceImpl implements MedItemService {
     }
 
     public MedItem createMedItem(MedItemRequest request) {
+        List<MedItem> items =
+                medItemRepository.findByMedicamento(request.getMedicamento())
+                        .stream()
+                        .peek(medItem -> {
+                            StatusCount statusCount = new StatusCount(0, 0, 0);
+                            medItem.getAlarms().forEach(alarm -> {
+                                AlarmStatus status = AlarmStatus.fromChar(alarm.getStatus());
+                                statusCount.incrementCount(status);
+                            });
+                            medItem.setStatusCount(statusCount);
+                        }).filter(medItem -> {
+                            return medItem.getStatusCount().getReadyCount()!=0 && medItem.getStatusCount().getWaitingCount()!=0;
+                        })
+                        .collect(Collectors.toList());
+        if(items!=null && items.size()>0){
+            throw new MedAlreadyExisteException("Ya existe una programación pendiente para el medicamento "+request.getMedicamento()+"\nEn caso de necesitar crear una nueva programacion previamente se debe eliminar la programacion pendiente");
+        }
+
+
+
+
+
         // 1. Crear el MedItem
         MedItem medItem = new MedItem();
         medItem.setMedicamento(request.getMedicamento());
